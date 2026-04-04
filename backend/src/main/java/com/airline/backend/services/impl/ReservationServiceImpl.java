@@ -104,6 +104,10 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     @Transactional(readOnly = true)
     public List<ReservationResponseDTO> getReservationsByFlight(Integer flightId) {
+        if (!flightRepository.existsById(flightId)) {
+            throw new ResourceNotFoundException("Flight", "flightId", flightId);
+        }
+
         return reservationRepository.findByFlight_FlightId(flightId).stream()
                 .map(r -> {
                     List<PassengerFlight> passengers =
