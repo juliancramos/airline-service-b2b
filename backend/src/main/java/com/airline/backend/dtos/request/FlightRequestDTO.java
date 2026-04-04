@@ -47,7 +47,4 @@ public class FlightRequestDTO {
 
     @NotNull
     private FlightStatus status;
-
-    @NotNull
-    private Integer createdBy;
 }
