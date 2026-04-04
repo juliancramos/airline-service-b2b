@@ -1,0 +1,23 @@
+@baseUrl = http://localhost:8080/api/v1
+
+
+### [1] Create an employee
+# @name createEmployee
+POST {{baseUrl}}/employees
+Content-Type: application/json
+
+{
+  "documentType": "CC",
+  "documentNumber": "1234567890",
+  "firstName": "Julian",
+  "lastName": "Ramos",
+  "email": "julian.ramos@airline.com",
+  "password": "12345678",
+  "roleId": 1,
+  "status": "active"
+}
+
+###
+
+### [2] Get the employee created above by ID
+GET {{baseUrl}}/employees/1

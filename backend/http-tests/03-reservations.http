@@ -1,0 +1,52 @@
+@baseUrl = http://localhost:8080/api/v1
+
+
+### [1] Create a reservation (2 passengers)
+# @name createReservation
+POST {{baseUrl}}/reservations?requesterId=1
+Content-Type: application/json
+
+{
+  "flightId": 1,
+  "externalReservationId": "EXT-B2B-00123",
+  "passengers": [
+    {
+      "documentType": "CC",
+      "documentNumber": "987654322",
+      "firstName": "pasajero",
+      "lastName": "3"
+    },
+    {
+      "documentType": "PASAPORTE",
+      "documentNumber": "PA-555-2027",
+      "firstName": "pasajero",
+      "lastName": "4"
+    }
+  ]
+}
+
+###
+
+### [2] Confirm the reservation created above (once payment is confirmed)
+POST {{baseUrl}}/reservations/1/confirm?requesterId=1
+
+###
+
+### [3] Get all reservations for flight ID 1
+GET {{baseUrl}}/reservations/flight/1
+
+###
+
+### [4] Test — Attempt to create a reservation with no passengers (expects 400)
+POST {{baseUrl}}/reservations?requesterId=1
+Content-Type: application/json
+
+{
+  "flightId": 1,
+  "passengers": []
+}
+
+###
+
+### [5] Test — Attempt to fetch a reservation for a non-existent flight (expects 404)
+GET {{baseUrl}}/reservations/flight/9999
