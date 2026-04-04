@@ -1,0 +1,513 @@
+// ── Design Tokens ──────────────────────────────────────────────────────────
+$color-bg-deep:        #0a0f1e;
+$color-bg-form:        #0d1227;
+$color-brand-primary:  #4f8ef7;
+$color-brand-accent:   #7b5cf0;
+$color-brand-gradient: linear-gradient(135deg, #4f8ef7 0%, #7b5cf0 100%);
+$color-surface:        rgba(255, 255, 255, 0.04);
+$color-border:         rgba(255, 255, 255, 0.08);
+$color-border-focus:   #4f8ef7;
+$color-border-error:   #f87171;
+$color-text-primary:   #f1f5f9;
+$color-text-secondary: #94a3b8;
+$color-text-muted:     #64748b;
+$color-error-text:     #fca5a5;
+$color-error-bg:       rgba(239, 68, 68, 0.1);
+
+$radius-sm:  6px;
+$radius-md:  10px;
+$radius-lg:  16px;
+$radius-xl:  24px;
+
+$transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+$transition-std:  250ms cubic-bezier(0.4, 0, 0.2, 1);
+
+// ── Page Layout ────────────────────────────────────────────────────────────
+.login-page {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 100vh;
+  background-color: $color-bg-deep;
+  font-family: 'Inter', system-ui, sans-serif;
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// ── Branding Panel ─────────────────────────────────────────────────────────
+.branding-panel {
+  position: relative;
+  overflow: hidden;
+  background: $color-bg-deep;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+
+  @media (max-width: 900px) {
+    display: none;
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 40%, rgba(79, 142, 247, 0.15) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 80% at 80% 70%, rgba(123, 92, 240, 0.12) 0%, transparent 60%);
+    pointer-events: none;
+  }
+}
+
+.branding-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3.5rem;
+  max-width: 440px;
+}
+
+.brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+
+  &__icon {
+    width: 44px;
+    height: 44px;
+    color: $color-brand-primary;
+    filter: drop-shadow(0 0 16px rgba(79, 142, 247, 0.5));
+  }
+
+  &__name {
+    font-size: 1.625rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: $color-text-primary;
+  }
+}
+
+.brand-tagline {
+  &__headline {
+    font-size: clamp(2rem, 3.5vw, 2.75rem);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1.15;
+    color: $color-text-primary;
+    margin: 0 0 1.25rem;
+
+    background: linear-gradient(135deg, #f1f5f9 30%, rgba(123, 92, 240, 0.85) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  &__sub {
+    font-size: 1rem;
+    line-height: 1.75;
+    color: $color-text-secondary;
+    margin: 0;
+  }
+}
+
+.brand-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  padding-top: 2.5rem;
+  border-top: 1px solid $color-border;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+
+  &__value {
+    font-size: 1.625rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: $color-text-primary;
+    background: $color-brand-gradient;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  &__label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: $color-text-muted;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+}
+
+// Decorative rings
+.branding-decor {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.decor-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(79, 142, 247, 0.08);
+  animation: pulse-ring 6s ease-in-out infinite;
+
+  &--1 {
+    width: 480px;
+    height: 480px;
+    bottom: -160px;
+    right: -160px;
+    animation-delay: 0s;
+  }
+
+  &--2 {
+    width: 340px;
+    height: 340px;
+    bottom: -80px;
+    right: -80px;
+    border-color: rgba(123, 92, 240, 0.1);
+    animation-delay: 2s;
+  }
+
+  &--3 {
+    width: 200px;
+    height: 200px;
+    bottom: 0;
+    right: 0;
+    border-color: rgba(79, 142, 247, 0.14);
+    animation-delay: 4s;
+  }
+}
+
+@keyframes pulse-ring {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50%       { opacity: 1;   transform: scale(1.03); }
+}
+
+// ── Form Panel ─────────────────────────────────────────────────────────────
+.form-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 2rem 1.5rem;
+  background-color: $color-bg-form;
+  gap: 1.5rem;
+}
+
+.form-card {
+  width: 100%;
+  max-width: 420px;
+  background: $color-surface;
+  border: 1px solid $color-border;
+  border-radius: $radius-xl;
+  padding: 2.5rem 2.25rem;
+  backdrop-filter: blur(24px);
+  box-shadow:
+    0 0 0 1px rgba(79, 142, 247, 0.06),
+    0 24px 48px rgba(0, 0, 0, 0.4),
+    0 8px 16px rgba(0, 0, 0, 0.25);
+
+  &__header {
+    margin-bottom: 2rem;
+  }
+
+  &__eyebrow {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: $color-brand-primary;
+    margin: 0 0 0.75rem;
+  }
+
+  &__title {
+    font-size: 1.75rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: $color-text-primary;
+    margin: 0 0 0.625rem;
+    line-height: 1.2;
+  }
+
+  &__subtitle {
+    font-size: 0.875rem;
+    line-height: 1.6;
+    color: $color-text-secondary;
+    margin: 0;
+  }
+
+  &__footer {
+    text-align: center;
+    font-size: 0.8125rem;
+    color: $color-text-muted;
+    margin: 1.75rem 0 0;
+  }
+
+  &__footer-link {
+    color: $color-brand-primary;
+    text-decoration: none;
+    font-weight: 500;
+    margin-left: 0.25rem;
+    transition: color $transition-fast;
+
+    &:hover {
+      color: lighten($color-brand-primary, 15%);
+      text-decoration: underline;
+    }
+  }
+}
+
+// ── Alert ──────────────────────────────────────────────────────────────────
+.alert {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.875rem 1rem;
+  border-radius: $radius-md;
+  margin-bottom: 1.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  animation: slide-in $transition-std;
+
+  &__icon {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+  }
+
+  &--error {
+    background: $color-error-bg;
+    border: 1px solid rgba(248, 113, 113, 0.25);
+    color: $color-error-text;
+  }
+}
+
+@keyframes slide-in {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+// ── Form Fields ────────────────────────────────────────────────────────────
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.375rem;
+}
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  &__label {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: $color-text-secondary;
+    letter-spacing: 0.02em;
+  }
+
+  &__label-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__forgot-link {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: $color-brand-primary;
+    text-decoration: none;
+    transition: color $transition-fast;
+
+    &:hover {
+      color: lighten($color-brand-primary, 15%);
+    }
+  }
+
+  &__input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1.5px solid $color-border;
+    border-radius: $radius-md;
+    transition: border-color $transition-std, box-shadow $transition-std;
+
+    &:focus-within {
+      border-color: $color-border-focus;
+      box-shadow: 0 0 0 3px rgba(79, 142, 247, 0.15);
+    }
+
+    &--error {
+      border-color: $color-border-error;
+      box-shadow: none;
+
+      &:focus-within {
+        border-color: $color-border-error;
+        box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.15);
+      }
+    }
+  }
+
+  &__icon {
+    width: 16px;
+    height: 16px;
+    color: $color-text-muted;
+    flex-shrink: 0;
+    margin-left: 0.875rem;
+    pointer-events: none;
+  }
+
+  &__input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 0.75rem 0.875rem;
+    font-size: 0.9375rem;
+    color: $color-text-primary;
+    font-family: inherit;
+
+    &::placeholder {
+      color: $color-text-muted;
+    }
+
+    &:-webkit-autofill {
+      -webkit-box-shadow: 0 0 0 1000px $color-bg-form inset;
+      -webkit-text-fill-color: $color-text-primary;
+      caret-color: $color-text-primary;
+    }
+  }
+
+  &__toggle-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: transparent;
+    border: none;
+    color: $color-text-muted;
+    cursor: pointer;
+    border-radius: $radius-sm;
+    transition: color $transition-fast;
+    flex-shrink: 0;
+
+    &:hover {
+      color: $color-text-secondary;
+    }
+
+    svg {
+      width: 18px;
+      height: 18px;
+    }
+  }
+
+  &__error {
+    font-size: 0.8rem;
+    color: $color-error-text;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    margin: 0;
+    animation: slide-in $transition-fast;
+  }
+}
+
+// ── Submit Button ──────────────────────────────────────────────────────────
+.submit-btn {
+  margin-top: 0.5rem;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  padding: 0.875rem 1.5rem;
+  background: $color-brand-gradient;
+  border: none;
+  border-radius: $radius-md;
+  font-family: inherit;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #fff;
+  cursor: pointer;
+  transition: opacity $transition-std, transform $transition-std, box-shadow $transition-std;
+  box-shadow: 0 4px 16px rgba(79, 142, 247, 0.35);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  &:hover:not(:disabled) {
+    opacity: 0.92;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(79, 142, 247, 0.45);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+
+  &__arrow {
+    width: 18px;
+    height: 18px;
+    transition: transform $transition-fast;
+  }
+
+  &:hover:not(:disabled) &__arrow {
+    transform: translateX(3px);
+  }
+
+  &__spinner {
+    width: 18px;
+    height: 18px;
+    border: 2.5px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    flex-shrink: 0;
+  }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+// ── Security Badge ─────────────────────────────────────────────────────────
+.security-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: $color-text-muted;
+  font-weight: 500;
+
+  &__icon {
+    width: 14px;
+    height: 14px;
+    color: $color-brand-primary;
+    opacity: 0.7;
+    flex-shrink: 0;
+  }
+}

@@ -1,0 +1,38 @@
+<div class="min-h-screen bg-[#0a0f1e] flex items-center justify-center p-8 font-sans">
+  <div class="text-center space-y-6">
+    <!-- Badge -->
+    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 text-sm font-semibold tracking-wide">
+      <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+      Authentication Successful
+    </div>
+
+    <!-- Heading -->
+    <div class="space-y-2">
+      <h1 class="text-4xl font-extrabold tracking-tight text-slate-100">
+        Welcome back, <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-violet-500">{{ user?.name ?? 'Crew Member' }}</span>
+      </h1>
+      <p class="text-slate-400 text-lg">
+        Role: <span class="font-medium text-slate-300">{{ user?.role }}</span>
+        &nbsp;·&nbsp;
+        Department: <span class="font-medium text-slate-300">{{ user?.department }}</span>
+      </p>
+      <p class="text-slate-500 text-sm">
+        The Operations Dashboard is under construction. <br class="hidden sm:block" />
+        This placeholder confirms the routing and auth flow are working correctly.
+      </p>
+    </div>
+
+    <!-- Logout -->
+    <button
+      id="dashboard-logout-btn"
+      (click)="logout()"
+      class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-white/5 border border-white/10 text-slate-300 text-sm font-medium hover:bg-white/10 transition-colors duration-150 cursor-pointer"
+    >
+      <svg class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M3 4.25A2.25 2.25 0 015.25 2h5.5A2.25 2.25 0 0113 4.25v2a.75.75 0 01-1.5 0v-2a.75.75 0 00-.75-.75h-5.5a.75.75 0 00-.75.75v11.5c0 .414.336.75.75.75h5.5a.75.75 0 00.75-.75v-2a.75.75 0 011.5 0v2A2.25 2.25 0 0110.75 18h-5.5A2.25 2.25 0 013 15.75V4.25z" clip-rule="evenodd" />
+        <path fill-rule="evenodd" d="M19 10a.75.75 0 00-.75-.75H8.704l1.048-1.08a.75.75 0 10-1.064-1.058l-2.5 2.571a.75.75 0 000 1.055l2.5 2.571a.75.75 0 001.06-1.06l-1.06-1.079h9.546A.75.75 0 0019 10z" clip-rule="evenodd" />
+      </svg>
+      Sign out
+    </button>
+  </div>
+</div>
