@@ -23,4 +23,6 @@ public interface ReservationMapper {
     @Mapping(target = "passengerFlightId", ignore = true)
     @Mapping(target = "reservation", ignore = true)
     PassengerFlight passengerDTOToEntity(PassengerDTO dto);
+
+    PassengerDTO passengerEntityToDTO(PassengerFlight entity);
 }
