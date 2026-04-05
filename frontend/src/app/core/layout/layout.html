@@ -1,0 +1,21 @@
+<div class="flex h-screen w-full bg-gray-50 overflow-hidden font-sans">
+  
+  <!-- Left Sidebar (Full Height) -->
+  <app-sidebar></app-sidebar>
+
+  <!-- Right Column (Header + Content) -->
+  <div class="flex-1 flex flex-col h-screen overflow-hidden relative">
+    
+    <!-- Top Navigation -->
+    <app-header></app-header>
+    
+    <!-- Main Content Area -->
+    <main class="flex-1 w-full overflow-y-auto relative">
+      <div class="p-6 md:p-8">
+        <router-outlet></router-outlet>
+      </div>
+    </main>
+
+  </div>
+
+</div>

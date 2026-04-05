@@ -1,0 +1,201 @@
+<section class="login-page" aria-label="Login page">
+
+  <!-- ── Left Panel: Branding ── -->
+  <div class="branding-panel" aria-hidden="true">
+    <div class="branding-content">
+      <div class="brand-logo">
+        <svg class="brand-logo__icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8 32C8 32 18 14 32 14C46 14 56 32 56 32C56 32 46 50 32 50C18 50 8 32 8 32Z"
+            stroke="currentColor" stroke-width="2.5" stroke-linejoin="round" />
+          <circle cx="32" cy="32" r="7" fill="currentColor" opacity="0.9" />
+          <path d="M32 8V14M32 50V56M8 32H14M50 32H56" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" />
+        </svg>
+        <span class="brand-logo__name">SkyLine</span>
+      </div>
+
+      <div class="brand-tagline">
+        <h1 class="brand-tagline__headline">
+          The future of<br />airline operations.
+        </h1>
+        <p class="brand-tagline__sub">
+          A unified B2B platform for flight management,<br />
+          reservations, and crew coordination.
+        </p>
+      </div>
+
+      <div class="brand-stats">
+        <div class="stat-item">
+          <span class="stat-item__value">240+</span>
+          <span class="stat-item__label">Active Routes</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-item__value">18K</span>
+          <span class="stat-item__label">Daily Passengers</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-item__value">99.8%</span>
+          <span class="stat-item__label">Uptime SLA</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Decorative geometric shapes -->
+    <div class="branding-decor" aria-hidden="true">
+      <div class="decor-ring decor-ring--1"></div>
+      <div class="decor-ring decor-ring--2"></div>
+      <div class="decor-ring decor-ring--3"></div>
+    </div>
+  </div>
+
+  <!-- ── Right Panel: Form ── -->
+  <div class="form-panel">
+    <div class="form-card">
+
+      <!-- Header -->
+      <div class="form-card__header">
+        <p class="form-card__eyebrow">Employee Portal</p>
+        <h2 class="form-card__title">Sign in to your account</h2>
+        <p class="form-card__subtitle">
+          Authorized personnel only. Enter your corporate credentials to access the operations dashboard.
+        </p>
+      </div>
+
+      <!-- Error Alert -->
+      @if (loginError()) {
+        <div class="alert alert--error" role="alert">
+          <svg class="alert__icon" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd"
+              d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z"
+              clip-rule="evenodd" />
+          </svg>
+          <span>{{ loginError() }}</span>
+        </div>
+      }
+
+      <!-- Form -->
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form" novalidate>
+
+        <!-- Email Field -->
+        <div class="field-group">
+          <label for="email" class="field-group__label">Corporate Email</label>
+          <div class="field-group__input-wrapper" [class.field-group__input-wrapper--error]="emailInvalid">
+            <svg class="field-group__icon" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M3 4a2 2 0 00-2 2v1.161l8.441 4.221a1.25 1.25 0 001.118 0L19 7.162V6a2 2 0 00-2-2H3z" />
+              <path
+                d="M19 8.839l-7.77 3.885a2.75 2.75 0 01-2.46 0L1 8.839V14a2 2 0 002 2h14a2 2 0 002-2V8.839z" />
+            </svg>
+            <input
+              id="email"
+              type="email"
+              formControlName="email"
+              class="field-group__input"
+              placeholder="you@skyline.aero"
+              autocomplete="email"
+              [attr.aria-invalid]="emailInvalid"
+              aria-describedby="email-error"
+            />
+          </div>
+          @if (emailControl.errors?.['required'] && emailControl.touched) {
+            <p id="email-error" class="field-group__error" role="alert">Email address is required.</p>
+          } @else if (emailControl.errors?.['email'] && emailControl.touched) {
+            <p id="email-error" class="field-group__error" role="alert">Please enter a valid email address.</p>
+          }
+        </div>
+
+        <!-- Password Field -->
+        <div class="field-group">
+          <div class="field-group__label-row">
+            <label for="password" class="field-group__label">Password</label>
+            <a href="#" class="field-group__forgot-link" tabindex="0">Forgot password?</a>
+          </div>
+          <div class="field-group__input-wrapper" [class.field-group__input-wrapper--error]="passwordInvalid">
+            <svg class="field-group__icon" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd"
+                d="M10 1a4.5 4.5 0 00-4.5 4.5V9H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-.5V5.5A4.5 4.5 0 0010 1zm3 8V5.5a3 3 0 10-6 0V9h6z"
+                clip-rule="evenodd" />
+            </svg>
+            <input
+              id="password"
+              [type]="showPassword() ? 'text' : 'password'"
+              formControlName="password"
+              class="field-group__input"
+              placeholder="••••••••"
+              autocomplete="current-password"
+              [attr.aria-invalid]="passwordInvalid"
+              aria-describedby="password-error"
+            />
+            <button
+              type="button"
+              class="field-group__toggle-btn"
+              (click)="togglePasswordVisibility()"
+              [attr.aria-label]="showPassword() ? 'Hide password' : 'Show password'"
+            >
+              @if (showPassword()) {
+                <svg viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd"
+                    d="M3.28 2.22a.75.75 0 00-1.06 1.06l14.5 14.5a.75.75 0 101.06-1.06l-1.745-1.745a10.029 10.029 0 003.3-4.38 1.651 1.651 0 000-1.185A10.004 10.004 0 009.999 3a9.956 9.956 0 00-4.744 1.194L3.28 2.22zM7.752 6.69l1.092 1.092a2.5 2.5 0 013.374 3.373l1.091 1.092a4 4 0 00-5.557-5.557z"
+                    clip-rule="evenodd" />
+                  <path
+                    d="M10.748 13.93l2.523 2.523a9.987 9.987 0 01-3.27.547c-4.258 0-7.894-2.66-9.337-6.41a1.651 1.651 0 010-1.186A10.007 10.007 0 012.839 6.02L6.07 9.252a4 4 0 004.678 4.678z" />
+                </svg>
+              } @else {
+                <svg viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" />
+                  <path fill-rule="evenodd"
+                    d="M.664 10.59a1.651 1.651 0 010-1.186A10.004 10.004 0 0110 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0110 17c-4.257 0-7.893-2.66-9.336-6.41zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                    clip-rule="evenodd" />
+                </svg>
+              }
+            </button>
+          </div>
+          @if (passwordControl.errors?.['required'] && passwordControl.touched) {
+            <p id="password-error" class="field-group__error" role="alert">Password is required.</p>
+          } @else if (passwordControl.errors?.['minlength'] && passwordControl.touched) {
+            <p id="password-error" class="field-group__error" role="alert">Password must be at least 6 characters.</p>
+          }
+        </div>
+
+        <!-- Submit Button -->
+        <button
+          id="login-submit-btn"
+          type="submit"
+          class="submit-btn"
+          [disabled]="isLoading()"
+          [class.submit-btn--loading]="isLoading()"
+        >
+          @if (isLoading()) {
+            <span class="submit-btn__spinner" aria-hidden="true"></span>
+            <span>Authenticating...</span>
+          } @else {
+            <span>Sign In</span>
+            <svg class="submit-btn__arrow" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd"
+                d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z"
+                clip-rule="evenodd" />
+            </svg>
+          }
+        </button>
+
+      </form>
+
+      <!-- Footer -->
+      <p class="form-card__footer">
+        Need access?
+        <a href="mailto:it-support@skyline.aero" class="form-card__footer-link">Contact IT Support</a>
+      </p>
+
+    </div>
+
+    <!-- Bottom badge -->
+    <div class="security-badge" aria-label="Security notice">
+      <svg class="security-badge__icon" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd"
+          d="M9.661 2.237a.531.531 0 01.678 0 11.947 11.947 0 007.078 2.749.5.5 0 01.479.425c.069.52.104 1.05.104 1.589 0 5.162-3.26 9.563-7.834 11.256a.48.48 0 01-.332 0C5.26 16.563 2 12.162 2 7c0-.539.035-1.069.104-1.589a.5.5 0 01.48-.425 11.947 11.947 0 007.077-2.749z"
+          clip-rule="evenodd" />
+      </svg>
+      <span>256-bit SSL encrypted · SOC 2 Type II compliant</span>
+    </div>
+  </div>
+
+</section>

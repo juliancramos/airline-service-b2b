@@ -1,0 +1,27 @@
+<div class="max-w-7xl mx-auto space-y-6 text-gray-800 font-sans">
+  
+  <div class="space-y-4">
+    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-100/50 border border-emerald-200 text-emerald-800 text-xs font-bold tracking-wide">
+      <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+      SISTEMA EN LÍNEA
+    </div>
+    <h1 class="text-4xl font-extrabold tracking-tight text-gray-900">
+      Hola, <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600">{{ user?.name ?? 'Tripulante' }}</span>
+    </h1>
+    <p class="text-gray-500 text-base max-w-2xl">
+      Estás visualizando los módulos operativos en vivo. 
+      Rol: <span class="font-medium text-gray-700">{{ user?.role }}</span>
+      &nbsp;·&nbsp;
+      Departamento: <span class="font-medium text-gray-700">{{ user?.department }}</span>
+    </p>
+  </div>
+
+  <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-12 text-center text-gray-500 mt-8 flex flex-col items-center justify-center min-h-[300px]">
+    <svg class="mx-auto h-16 w-16 text-gray-300 mb-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+    </svg>
+    <p class="text-xl font-medium text-gray-800 mb-2">El panel de operaciones dináminas está en construcción.</p>
+    <p class="text-sm">En próximas iteraciones este espacio albergará KPIs, alertas de reserva y radares de vuelo.</p>
+  </div>
+
+</div>

@@ -1,0 +1,107 @@
+<div class="space-y-6 font-sans">
+  
+  <!-- Header Area -->
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div>
+      <h1 class="text-2xl font-bold tracking-tight text-gray-900">Gestión de Vuelos</h1>
+      <p class="text-sm text-gray-500 mt-1">Administra la programación, rutas y estado de los vuelos.</p>
+    </div>
+    <button routerLink="/flights/new" class="inline-flex items-center justify-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 transition-colors cursor-pointer">
+      <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+      Nuevo Vuelo
+    </button>
+  </div>
+
+  <!-- Filters Area -->
+  <div class="bg-white rounded-xl shadow-[0_2px_10px_rgb(0,0,0,0.04)] border border-gray-100 p-5">
+    <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 items-end">
+      <div class="space-y-1.5">
+        <label class="text-xs font-semibold text-gray-600 uppercase tracking-wider">Origen</label>
+        <input type="text" placeholder="Ej. BOG" class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500">
+      </div>
+      <div class="space-y-1.5">
+        <label class="text-xs font-semibold text-gray-600 uppercase tracking-wider">Destino</label>
+        <input type="text" placeholder="Ej. MIA" class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500">
+      </div>
+      <div class="space-y-1.5">
+        <label class="text-xs font-semibold text-gray-600 uppercase tracking-wider">Fecha</label>
+        <input type="date" class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 text-gray-500">
+      </div>
+      <div>
+        <button class="w-full rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800 transition-colors cursor-pointer shadow-sm">
+          Buscar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Data Table Area -->
+  <div class="bg-white rounded-xl shadow-[0_2px_10px_rgb(0,0,0,0.04)] border border-gray-100 overflow-hidden min-h-[300px] relative">
+    
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="absolute inset-0 z-10 flex flex-col items-center justify-center bg-white/80 backdrop-blur-[1px]">
+      <div class="h-8 w-8 animate-spin rounded-full border-4 border-gray-200 border-t-blue-600 mb-4"></div>
+      <p class="text-sm font-medium text-gray-500">Sincronizando itinerarios...</p>
+    </div>
+
+    <!-- Table -->
+    <div class="overflow-x-auto">
+      <table class="w-full whitespace-nowrap text-left text-sm">
+        <thead class="bg-gray-50/50 border-b border-gray-200">
+          <tr>
+            <th class="px-6 py-4 font-semibold text-gray-700">Vuelo</th>
+            <th class="px-6 py-4 font-semibold text-gray-700">Ruta</th>
+            <th class="px-6 py-4 font-semibold text-gray-700">Salida</th>
+            <th class="px-6 py-4 font-semibold text-gray-700">Llegada</th>
+            <th class="px-6 py-4 font-semibold text-gray-700">Estado</th>
+            <th class="px-6 py-4 font-semibold text-gray-700 text-right">Precio</th>
+            <th class="px-6 py-4 font-semibold text-gray-700 text-center">Acciones</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          <tr *ngFor="let flight of flights" class="hover:bg-gray-50/50 transition-colors">
+            <td class="px-6 py-4">
+              <span class="font-bold text-gray-900">{{ flight.flightNumber }}</span>
+            </td>
+            <td class="px-6 py-4">
+              <div class="flex items-center text-gray-600">
+                <span class="font-medium text-slate-800">{{ flight.origin }}</span>
+                <svg class="mx-2 h-4 w-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                <span class="font-medium text-slate-800">{{ flight.destination }}</span>
+              </div>
+            </td>
+            <td class="px-6 py-4 text-gray-600">
+              {{ flight.departureTime | date:'MMM d, HH:mm' }}
+            </td>
+            <td class="px-6 py-4 text-gray-600">
+              {{ flight.arrivalTime | date:'MMM d, HH:mm' }}
+            </td>
+            <td class="px-6 py-4">
+              <span 
+                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold capitalize"
+                [ngClass]="{
+                  'bg-emerald-100 text-emerald-800': flight.status === 'scheduled',
+                  'bg-blue-100 text-blue-800': flight.status === 'active',
+                  'bg-rose-100 text-rose-800': flight.status === 'cancelled'
+                }">
+                <!-- Spanish translations for dummy data -->
+                {{ flight.status === 'scheduled' ? 'Programado' : flight.status === 'active' ? 'En el aire' : 'Cancelado' }}
+              </span>
+            </td>
+            <td class="px-6 py-4 text-right font-medium text-gray-900">
+              {{ flight.price | currency:'USD' }}
+            </td>
+            <td class="px-6 py-4 text-center">
+              <button class="text-blue-600 hover:text-blue-800 font-medium text-sm transition-colors cursor-pointer">Gestionar</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      
+      <!-- Empty State handling just in case -->
+      <div *ngIf="flights.length === 0 && !isLoading" class="p-12 text-center">
+        <p class="text-gray-500">No hay vuelos registrados para esta búsqueda.</p>
+      </div>
+    </div>
+  </div>
+</div>

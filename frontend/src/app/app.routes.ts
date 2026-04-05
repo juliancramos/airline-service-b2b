@@ -1,0 +1,68 @@
+import { Routes } from '@angular/router';
+
+export const routes: Routes = [
+  {
+    path: 'login',
+    loadComponent: () =>
+      import('./features/auth/login/login.component').then(
+        (m) => m.LoginComponent,
+      ),
+    title: 'Sign In — SkyLine Ops',
+  },
+  {
+    path: '',
+    loadComponent: () =>
+      import('./core/layout/layout').then((m) => m.LayoutComponent),
+    children: [
+      {
+        path: 'dashboard',
+        loadComponent: () =>
+          import('./features/dashboard/dashboard.component').then(
+            (m) => m.DashboardComponent,
+          ),
+        title: 'Dashboard — SkyLine Ops',
+      },
+      {
+        path: 'flights/new',
+        loadComponent: () =>
+          import('./features/flights/flight-form/flight-form.component').then(
+            (m) => m.FlightFormComponent,
+          ),
+        title: 'Nuevo Vuelo — SkyLine Ops',
+      },
+      {
+        path: 'flights',
+        loadComponent: () =>
+          import('./features/flights/flight-list.component').then(
+            (m) => m.FlightListComponent,
+          ),
+        title: 'Vuelos — SkyLine Ops',
+      },
+      {
+        path: 'reservations/new',
+        loadComponent: () =>
+          import('./features/reservations/reservation-form/reservation-form.component').then(
+            (m) => m.ReservationFormComponent,
+          ),
+        title: 'Nueva Reserva B2B — SkyLine Ops',
+      },
+      {
+        path: 'reservations',
+        loadComponent: () =>
+          import('./features/reservations/reservation-list.component').then(
+            (m) => m.ReservationListComponent,
+          ),
+        title: 'Reservas — SkyLine Ops',
+      },
+      {
+        path: '',
+        redirectTo: 'dashboard',
+        pathMatch: 'full'
+      }
+    ]
+  },
+  {
+    path: '**',
+    redirectTo: 'login',
+  },
+];
