@@ -50,3 +50,32 @@ Content-Type: application/json
 
 ### [5] Test — Attempt to fetch a reservation for a non-existent flight (expects 404)
 GET {{baseUrl}}/reservations/flight/9999
+
+
+
+
+### DYNAMIC SEARCH TESTS
+
+### [A] Search all reservations (no parameters)
+GET {{baseUrl}}/reservations/search
+
+###
+
+### [B] Search by origin only
+GET {{baseUrl}}/reservations/search?origin=Bogota
+
+###
+
+### [C] Search by passenger document only
+GET {{baseUrl}}/reservations/search?passengerDocument=987654321
+
+###
+
+### [D] Search by multiple fields (destination AND date)
+GET {{baseUrl}}/reservations/search?destination=Medellin&date=2026-08-15
+
+###
+
+### [E] Search by exact flightId
+GET {{baseUrl}}/reservations/search?flightId=1
+
