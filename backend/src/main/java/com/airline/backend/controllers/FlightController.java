@@ -21,12 +21,14 @@ public class FlightController {
     private final FlightService flightService;
 
     @GetMapping
-    public ResponseEntity<List<FlightResponseDTO>> searchFlights(
-            @RequestParam String origin,
-            @RequestParam String destination,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+    public ResponseEntity<org.springframework.data.domain.Page<FlightResponseDTO>> searchFlights(
+            @RequestParam(required = false) String origin,
+            @RequestParam(required = false) String destination,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
 
-        return ResponseEntity.ok(flightService.searchFlights(origin, destination, date));
+        return ResponseEntity.ok(flightService.searchFlights(origin, destination, date, page, size));
     }
 
     @PostMapping

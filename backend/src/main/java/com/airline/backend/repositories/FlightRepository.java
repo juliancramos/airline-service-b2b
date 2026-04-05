@@ -11,10 +11,18 @@ import java.util.List;
 @Repository
 public interface FlightRepository extends JpaRepository<Flight, Integer> {
 
-    List<Flight> findByOriginCityAndDestinationCityAndDepartureDate(
-            String originCity,
-            String destinationCity,
-            LocalDate departureDate
+    @org.springframework.data.jpa.repository.Query("""
+        SELECT f FROM Flight f
+        WHERE (:origin IS NULL OR f.originCity = :origin)
+        AND (:dest IS NULL OR f.destinationCity = :dest)
+        AND (CAST(:date AS date) IS NULL OR f.departureDate = :date)
+        ORDER BY f.departureDate ASC, f.startTime ASC
+    """)
+    org.springframework.data.domain.Page<Flight> searchOptionalFlights(
+            @org.springframework.data.repository.query.Param("origin") String origin,
+            @org.springframework.data.repository.query.Param("dest") String dest,
+            @org.springframework.data.repository.query.Param("date") LocalDate date,
+            org.springframework.data.domain.Pageable pageable
     );
 
     List<Flight> findByStatus(FlightStatus status);
