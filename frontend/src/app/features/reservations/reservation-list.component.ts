@@ -1,14 +1,35 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { ReservationService } from '../../core/services/reservation.service';
+import { Reservation } from '../../shared/models/reservation.model';
 
 @Component({
   selector: 'app-reservation-list',
   standalone: true,
-  imports: [],
-  template: `
-    <div class="p-8">
-      <h1 class="text-3xl font-bold text-slate-800 tracking-tight mb-2">Módulo de Reservas</h1>
-      <p class="text-slate-500">Esta sección está actualmente en construcción. Aquí podrás administrar los asientos y pasajeros.</p>
-    </div>
-  `
+  imports: [CommonModule, RouterLink],
+  templateUrl: './reservation-list.component.html'
 })
-export class ReservationListComponent {}
+export class ReservationListComponent implements OnInit {
+  private readonly reservationService = inject(ReservationService);
+
+  reservations: Reservation[] = [];
+  isLoading = true;
+
+  ngOnInit(): void {
+    this.loadReservations();
+  }
+
+  loadReservations(): void {
+    this.isLoading = true;
+    this.reservationService.getReservations().subscribe({
+      next: (data) => {
+        this.reservations = data;
+        this.isLoading = false;
+      },
+      error: () => {
+        this.isLoading = false;
+      }
+    });
+  }
+}
