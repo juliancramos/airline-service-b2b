@@ -1,0 +1,50 @@
+<div class="flex flex-col h-full font-sans bg-white">
+  
+  <!-- Interactive Search Frame -->
+  <div class="p-6 border-b border-gray-100 bg-white shrink-0">
+    <div class="relative">
+      <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+      </div>
+      <input type="search" class="block w-full p-3 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition-colors" placeholder="Buscar por origen, destino o fecha...">
+    </div>
+  </div>
+
+  <!-- Scrollable Constraint Table Content -->
+  <div class="overflow-y-auto max-h-96">
+    <table class="w-full text-sm text-left text-gray-600">
+      <thead class="text-xs text-gray-500 uppercase bg-gray-50/90 sticky top-0 border-b border-gray-100 z-10 backdrop-blur-md">
+        <tr>
+          <th scope="col" class="px-6 py-4 font-semibold tracking-wider">Vuelo</th>
+          <th scope="col" class="px-6 py-4 font-semibold tracking-wider">Ruta</th>
+          <th scope="col" class="px-6 py-4 font-semibold tracking-wider">Fecha / Hora</th>
+          <th scope="col" class="px-6 py-4 font-semibold tracking-wider text-right">Acción</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-100">
+        <tr *ngFor="let flight of flights" class="bg-white hover:bg-blue-50/50 transition-colors group">
+          <td class="px-6 py-4 font-bold text-gray-900 whitespace-nowrap">
+            {{ flight.flightNumber }}
+          </td>
+          <td class="px-6 py-4">
+            <div class="flex items-center">
+              <span class="font-medium text-slate-800">{{ flight.origin }}</span>
+              <span class="mx-2 text-gray-300">→</span>
+              <span class="font-medium text-slate-800">{{ flight.destination }}</span>
+            </div>
+          </td>
+          <td class="px-6 py-4 text-gray-500 font-medium">
+            {{ flight.datetime }}
+          </td>
+          <td class="px-6 py-4 text-right">
+            <button 
+              (click)="selectFlight(flight)"
+              class="inline-flex items-center bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-4 py-1.5 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 transition-colors cursor-pointer">
+              Seleccionar
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
