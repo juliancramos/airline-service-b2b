@@ -1,14 +1,34 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FlightService } from '../../core/services/flight.service';
+import { Flight } from '../../shared/models/flight.model';
 
 @Component({
   selector: 'app-flight-list',
   standalone: true,
-  imports: [],
-  template: `
-    <div class="p-8">
-      <h1 class="text-3xl font-bold text-slate-800 tracking-tight mb-2">Módulo de Vuelos</h1>
-      <p class="text-slate-500">Esta sección está actualmente en construcción. Aquí aparecerá la gestión de rutas y estado de vuelos.</p>
-    </div>
-  `
+  imports: [CommonModule],
+  templateUrl: './flight-list.component.html'
 })
-export class FlightListComponent {}
+export class FlightListComponent implements OnInit {
+  private readonly flightService = inject(FlightService);
+
+  flights: Flight[] = [];
+  isLoading = true;
+
+  ngOnInit(): void {
+    this.loadFlights();
+  }
+
+  loadFlights(): void {
+    this.isLoading = true;
+    this.flightService.getFlights().subscribe({
+      next: (data) => {
+        this.flights = data;
+        this.isLoading = false;
+      },
+      error: () => {
+        this.isLoading = false;
+      }
+    });
+  }
+}
