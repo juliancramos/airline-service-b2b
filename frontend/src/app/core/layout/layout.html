@@ -1,21 +1,18 @@
-<div class="flex flex-col h-screen w-full bg-slate-50 overflow-hidden font-sans">
+<div class="flex h-screen w-full bg-gray-50 overflow-hidden font-sans">
   
-  <!-- Top Navigation (Full Width) -->
-  <app-header></app-header>
-  
-  <!-- Bottom Area: Sidebar + Main Content -->
-  <div class="flex flex-1 overflow-hidden relative">
-    
-    <!-- Left Sidebar -->
-    <app-sidebar></app-sidebar>
+  <!-- Left Sidebar (Full Height) -->
+  <app-sidebar></app-sidebar>
 
+  <!-- Right Column (Header + Content) -->
+  <div class="flex-1 flex flex-col h-screen overflow-hidden relative">
+    
+    <!-- Top Navigation -->
+    <app-header></app-header>
+    
     <!-- Main Content Area -->
-    <main class="flex-1 w-full overflow-y-auto">
-      <div class="w-full max-w-7xl mx-auto p-6 md:p-8">
-        <!-- Main Panel Container -->
-        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 min-h-[calc(100vh-8rem)] relative overflow-hidden">
-          <router-outlet></router-outlet>
-        </div>
+    <main class="flex-1 w-full overflow-y-auto relative">
+      <div class="p-6 md:p-8">
+        <router-outlet></router-outlet>
       </div>
     </main>
 
