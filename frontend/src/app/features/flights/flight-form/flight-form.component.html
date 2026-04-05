@@ -1,0 +1,94 @@
+<div class="space-y-6 font-sans animate-fade-in max-w-4xl mx-auto">
+  
+  <!-- Header Area -->
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div>
+      <h1 class="text-2xl font-bold tracking-tight text-gray-900">Crear Nuevo Vuelo</h1>
+      <p class="text-sm text-gray-500 mt-1">Registra una nueva ruta operativa y su itinerario.</p>
+    </div>
+    <a routerLink="/flights" class="inline-flex items-center justify-center rounded-lg bg-white border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 transition-colors cursor-pointer">
+      <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+      Volver al listado
+    </a>
+  </div>
+
+  <!-- Form Area -->
+  <div class="bg-white rounded-xl shadow-[0_2px_10px_rgb(0,0,0,0.04)] border border-gray-100 p-6 md:p-8">
+    <form [formGroup]="flightForm" (ngSubmit)="onSubmit()" class="space-y-6">
+      
+      <!-- Grid 2 columns -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        
+        <!-- Origen -->
+        <div class="space-y-1.5">
+          <label class="text-sm font-semibold text-gray-700">Origen</label>
+          <input type="text" formControlName="origin" placeholder="Ej. BOG (Aeropuerto El Dorado)" 
+            class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            [class.border-red-500]="flightForm.get('origin')?.invalid && flightForm.get('origin')?.touched">
+          <p *ngIf="flightForm.get('origin')?.invalid && flightForm.get('origin')?.touched" class="text-xs text-red-500 mt-1">Este campo es requerido.</p>
+        </div>
+
+        <!-- Destino -->
+        <div class="space-y-1.5">
+          <label class="text-sm font-semibold text-gray-700">Destino</label>
+          <input type="text" formControlName="destination" placeholder="Ej. MIA (Aeropuerto Intl. Miami)" 
+            class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            [class.border-red-500]="flightForm.get('destination')?.invalid && flightForm.get('destination')?.touched">
+          <p *ngIf="flightForm.get('destination')?.invalid && flightForm.get('destination')?.touched" class="text-xs text-red-500 mt-1">Este campo es requerido.</p>
+        </div>
+
+        <!-- Salida -->
+        <div class="space-y-1.5">
+          <label class="text-sm font-semibold text-gray-700">Hora de Salida</label>
+          <input type="datetime-local" formControlName="departureTime" 
+            class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            [class.border-red-500]="flightForm.get('departureTime')?.invalid && flightForm.get('departureTime')?.touched">
+          <p *ngIf="flightForm.get('departureTime')?.invalid && flightForm.get('departureTime')?.touched" class="text-xs text-red-500 mt-1">Este campo es requerido.</p>
+        </div>
+
+        <!-- Llegada -->
+        <div class="space-y-1.5">
+          <label class="text-sm font-semibold text-gray-700">Hora de Llegada</label>
+          <input type="datetime-local" formControlName="arrivalTime" 
+            class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            [class.border-red-500]="flightForm.get('arrivalTime')?.invalid && flightForm.get('arrivalTime')?.touched">
+          <p *ngIf="flightForm.get('arrivalTime')?.invalid && flightForm.get('arrivalTime')?.touched" class="text-xs text-red-500 mt-1">Este campo es requerido.</p>
+        </div>
+
+        <!-- Capacidad -->
+        <div class="space-y-1.5">
+          <label class="text-sm font-semibold text-gray-700">Capacidad (Asientos)</label>
+          <input type="number" formControlName="capacity" 
+            class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            [class.border-red-500]="flightForm.get('capacity')?.invalid && flightForm.get('capacity')?.touched">
+          <p *ngIf="flightForm.get('capacity')?.invalid && flightForm.get('capacity')?.touched" class="text-xs text-red-500 mt-1">El valor mínimo es 1.</p>
+        </div>
+
+        <!-- Precio -->
+        <div class="space-y-1.5">
+          <label class="text-sm font-semibold text-gray-700">Precio Base (USD)</label>
+          <input type="number" formControlName="price" 
+            class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            [class.border-red-500]="flightForm.get('price')?.invalid && flightForm.get('price')?.touched">
+          <p *ngIf="flightForm.get('price')?.invalid && flightForm.get('price')?.touched" class="text-xs text-red-500 mt-1">Precio debe ser mayor a 0.</p>
+        </div>
+
+      </div>
+
+      <!-- Footer Buttons -->
+      <div class="pt-6 border-t border-gray-100 flex items-center justify-end gap-3 mt-8">
+        <a routerLink="/flights" class="rounded-md px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer">
+          Cancelar
+        </a>
+        <button type="submit" [disabled]="isSubmitting" class="inline-flex items-center justify-center rounded-lg bg-blue-600 px-5 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 transition-colors focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 disabled:opacity-70 disabled:cursor-not-allowed cursor-pointer">
+          <svg *ngIf="isSubmitting" class="mr-2 h-4 w-4 animate-spin outline-none" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+          </svg>
+          {{ isSubmitting ? 'Guardando...' : 'Guardar Vuelo' }}
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>

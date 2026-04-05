@@ -9,4 +9,5 @@ export interface Flight {
   arrivalTime: string;
   status: FlightStatus;
   price: number;
+  capacity: number;
 }

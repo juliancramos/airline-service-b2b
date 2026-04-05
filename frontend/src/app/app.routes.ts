@@ -23,6 +23,14 @@ export const routes: Routes = [
         title: 'Dashboard — SkyLine Ops',
       },
       {
+        path: 'flights/new',
+        loadComponent: () =>
+          import('./features/flights/flight-form/flight-form.component').then(
+            (m) => m.FlightFormComponent,
+          ),
+        title: 'Nuevo Vuelo — SkyLine Ops',
+      },
+      {
         path: 'flights',
         loadComponent: () =>
           import('./features/flights/flight-list.component').then(

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, delay } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { delay } from 'rxjs/operators';
 import { Flight } from '../../shared/models/flight.model';
 
 @Injectable({
@@ -15,7 +16,8 @@ export class FlightService {
       departureTime: '2026-05-15T08:30:00Z',
       arrivalTime: '2026-05-15T12:45:00Z',
       status: 'scheduled',
-      price: 450.00
+      price: 450.00,
+      capacity: 150
     },
     {
       id: 'f-002',
@@ -25,7 +27,8 @@ export class FlightService {
       departureTime: '2026-05-15T18:00:00Z',
       arrivalTime: '2026-05-16T10:30:00Z',
       status: 'active',
-      price: 850.50
+      price: 850.50,
+      capacity: 220
     },
     {
       id: 'f-003',
@@ -35,31 +38,23 @@ export class FlightService {
       departureTime: '2026-05-14T14:15:00Z',
       arrivalTime: '2026-05-14T15:45:00Z',
       status: 'cancelled',
-      price: 210.00
-    },
-    {
-      id: 'f-004',
-      flightNumber: 'VY-555',
-      origin: 'Cartagena (CTG)',
-      destination: 'Nueva York (JFK)',
-      departureTime: '2026-05-16T09:00:00Z',
-      arrivalTime: '2026-05-16T14:20:00Z',
-      status: 'scheduled',
-      price: 520.00
-    },
-    {
-      id: 'f-005',
-      flightNumber: 'VY-202',
-      origin: 'Bogotá (BOG)',
-      destination: 'Lima (LIM)',
-      departureTime: '2026-05-17T22:30:00Z',
-      arrivalTime: '2026-05-18T01:45:00Z',
-      status: 'scheduled',
-      price: 310.00
+      price: 210.00,
+      capacity: 120
     }
   ];
 
   getFlights(): Observable<Flight[]> {
     return of(this.mockFlights).pipe(delay(800));
+  }
+
+  createFlight(flightData: Omit<Flight, 'id' | 'flightNumber' | 'status'>): Observable<Flight> {
+    const newFlight: Flight = {
+      ...flightData,
+      id: `f-${Math.floor(Math.random() * 1000)}`,
+      flightNumber: `VY-${Math.floor(Math.random() * 9000) + 1000}`,
+      status: 'scheduled'
+    };
+    this.mockFlights.unshift(newFlight);
+    return of(newFlight).pipe(delay(1000));
   }
 }

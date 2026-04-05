@@ -1,12 +1,13 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { FlightService } from '../../core/services/flight.service';
 import { Flight } from '../../shared/models/flight.model';
 
 @Component({
   selector: 'app-flight-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './flight-list.component.html'
 })
 export class FlightListComponent implements OnInit {
