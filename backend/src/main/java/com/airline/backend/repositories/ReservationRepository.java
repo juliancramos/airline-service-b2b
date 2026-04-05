@@ -13,4 +13,6 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
     List<Reservation> findByFlight_FlightId(Integer flightId);
 
     Optional<Reservation> findByExternalReservationId(String externalReservationId);
+
+    long countByReservationStatus(com.airline.backend.models.enums.ReservationStatus status);
 }
