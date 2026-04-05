@@ -117,6 +117,21 @@ public class ReservationServiceImpl implements ReservationService {
                 .toList();
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public List<ReservationResponseDTO> searchReservations(
+            Integer flightId, String origin, String destination, java.time.LocalDate date, String passengerDocument) {
+
+        return reservationRepository.findProjectedByFilters(flightId, origin, destination, date, passengerDocument)
+                .stream()
+                .map(r -> {
+                    List<PassengerFlight> passengers =
+                            passengerFlightRepository.findByReservation_ReservationId(r.getReservationId());
+                    return buildResponse(r, passengers);
+                })
+                .toList();
+    }
+
     // helpers
 
     private ReservationResponseDTO buildResponse(Reservation reservation, List<PassengerFlight> passengers) {

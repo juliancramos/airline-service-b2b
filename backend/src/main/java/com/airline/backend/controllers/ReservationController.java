@@ -41,4 +41,16 @@ public class ReservationController {
 
         return ResponseEntity.ok(reservationService.getReservationsByFlight(flightId));
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<ReservationResponseDTO>> searchReservations(
+            @RequestParam(required = false) Integer flightId,
+            @RequestParam(required = false) String origin,
+            @RequestParam(required = false) String destination,
+            @RequestParam(required = false) @org.springframework.format.annotation.DateTimeFormat(iso = org.springframework.format.annotation.DateTimeFormat.ISO.DATE) java.time.LocalDate date,
+            @RequestParam(required = false) String passengerDocument) {
+
+        return ResponseEntity.ok(reservationService.searchReservations(
+                flightId, origin, destination, date, passengerDocument));
+    }
 }

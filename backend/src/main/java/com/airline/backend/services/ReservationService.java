@@ -12,4 +12,7 @@ public interface ReservationService {
     ReservationResponseDTO confirmReservation(Integer reservationId, Integer requesterId);
 
     List<ReservationResponseDTO> getReservationsByFlight(Integer flightId);
+
+    List<ReservationResponseDTO> searchReservations(
+            Integer flightId, String origin, String destination, java.time.LocalDate date, String passengerDocument);
 }
