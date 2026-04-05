@@ -39,6 +39,14 @@ export const routes: Routes = [
         title: 'Vuelos — SkyLine Ops',
       },
       {
+        path: 'reservations/new',
+        loadComponent: () =>
+          import('./features/reservations/reservation-form/reservation-form.component').then(
+            (m) => m.ReservationFormComponent,
+          ),
+        title: 'Nueva Reserva B2B — SkyLine Ops',
+      },
+      {
         path: 'reservations',
         loadComponent: () =>
           import('./features/reservations/reservation-list.component').then(

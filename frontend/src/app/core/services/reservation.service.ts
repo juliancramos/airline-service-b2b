@@ -58,4 +58,15 @@ export class ReservationService {
   getReservations(): Observable<Reservation[]> {
     return of(this.mockReservations).pipe(delay(800));
   }
+
+  createReservation(reservationData: any): Observable<Reservation> {
+    const newReservation: Reservation = {
+      ...reservationData,
+      id: `RES-${Math.floor(Math.random() * 900) + 100}`,
+      status: 'pending',
+      createdAt: new Date().toISOString()
+    };
+    this.mockReservations.unshift(newReservation);
+    return of(newReservation).pipe(delay(1000));
+  }
 }
