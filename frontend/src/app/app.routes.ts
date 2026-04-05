@@ -23,6 +23,22 @@ export const routes: Routes = [
         title: 'Dashboard — SkyLine Ops',
       },
       {
+        path: 'flights',
+        loadComponent: () =>
+          import('./features/flights/flight-list.component').then(
+            (m) => m.FlightListComponent,
+          ),
+        title: 'Vuelos — SkyLine Ops',
+      },
+      {
+        path: 'reservations',
+        loadComponent: () =>
+          import('./features/reservations/reservation-list.component').then(
+            (m) => m.ReservationListComponent,
+          ),
+        title: 'Reservas — SkyLine Ops',
+      },
+      {
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full'
