@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Flight } from '../../shared/models/flight.model';
 import { AuthService } from './auth.service';
+import { PageResponse } from '../../shared/models/pagination.model';
 
 @Injectable({
   providedIn: 'root'
@@ -13,13 +14,16 @@ export class FlightService {
   private readonly authService = inject(AuthService);
   private readonly apiUrl = environment.apiUrl + '/flights';
 
-  getFlights(origin?: string, destination?: string, date?: string): Observable<Flight[]> {
-    let params = new HttpParams();
+  getFlights(origin?: string, destination?: string, date?: string, page: number = 0, size: number = 10): Observable<PageResponse<Flight>> {
+    let params = new HttpParams()
+        .set('page', page.toString())
+        .set('size', size.toString());
+        
     if (origin) params = params.set('origin', origin);
     if (destination) params = params.set('destination', destination);
     if (date) params = params.set('date', date);
       
-    return this.http.get<Flight[]>(this.apiUrl, { params });
+    return this.http.get<PageResponse<Flight>>(this.apiUrl, { params });
   }
 
   createFlight(flightData: Flight): Observable<Flight> {
