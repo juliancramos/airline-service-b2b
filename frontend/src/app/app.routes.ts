@@ -2,11 +2,6 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
-    path: '',
-    redirectTo: 'login',
-    pathMatch: 'full',
-  },
-  {
     path: 'login',
     loadComponent: () =>
       import('./features/auth/login/login.component').then(
@@ -15,12 +10,24 @@ export const routes: Routes = [
     title: 'Sign In — SkyLine Ops',
   },
   {
-    path: 'dashboard',
+    path: '',
     loadComponent: () =>
-      import('./features/dashboard/dashboard.component').then(
-        (m) => m.DashboardComponent,
-      ),
-    title: 'Dashboard — SkyLine Ops',
+      import('./core/layout/layout').then((m) => m.LayoutComponent),
+    children: [
+      {
+        path: 'dashboard',
+        loadComponent: () =>
+          import('./features/dashboard/dashboard.component').then(
+            (m) => m.DashboardComponent,
+          ),
+        title: 'Dashboard — SkyLine Ops',
+      },
+      {
+        path: '',
+        redirectTo: 'dashboard',
+        pathMatch: 'full'
+      }
+    ]
   },
   {
     path: '**',

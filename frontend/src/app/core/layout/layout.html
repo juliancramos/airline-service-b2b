@@ -1,0 +1,16 @@
+<div class="h-screen w-full flex flex-col bg-gray-50 overflow-hidden font-sans">
+  
+  <!-- Top Navigation -->
+  <app-header></app-header>
+  
+  <!-- Main Content Area -->
+  <main class="flex-1 w-full overflow-y-auto">
+    <div class="w-full max-w-7xl mx-auto p-6 md:p-8">
+      <div class="bg-white rounded-xl shadow-sm border border-gray-200 min-h-[500px] p-6">
+        <!-- Router Outlet acts as the placeholder below the header -->
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </main>
+
+</div>
