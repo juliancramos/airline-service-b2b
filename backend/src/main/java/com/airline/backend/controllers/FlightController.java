@@ -24,7 +24,7 @@ public class FlightController {
     public ResponseEntity<org.springframework.data.domain.Page<FlightResponseDTO>> searchFlights(
             @RequestParam(required = false) String origin,
             @RequestParam(required = false) String destination,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @RequestParam(required = false) String date,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
 

@@ -47,14 +47,15 @@ public class FlightServiceImpl implements FlightService {
 
     @Override
     @Transactional(readOnly = true)
-    public org.springframework.data.domain.Page<FlightResponseDTO> searchFlights(String origin, String destination, LocalDate date, int page, int size) {
+    public org.springframework.data.domain.Page<FlightResponseDTO> searchFlights(String origin, String destination, String date, int page, int size) {
         String mappedOrigin = (origin != null && !origin.trim().isEmpty()) ? origin : null;
         String mappedDest = (destination != null && !destination.trim().isEmpty()) ? destination : null;
+        java.time.LocalDate mappedDate = (date != null && !date.trim().isEmpty()) ? java.time.LocalDate.parse(date.trim()) : null;
 
         org.springframework.data.domain.PageRequest pageRequest = org.springframework.data.domain.PageRequest.of(page, size);
 
         return flightRepository
-                .searchOptionalFlights(mappedOrigin, mappedDest, date, pageRequest)
+                .searchOptionalFlights(mappedOrigin, mappedDest, mappedDate, pageRequest)
                 .map(flightMapper::toResponseDTO);
     }
 

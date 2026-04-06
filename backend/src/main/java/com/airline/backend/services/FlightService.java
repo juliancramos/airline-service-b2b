@@ -13,7 +13,7 @@ public interface FlightService {
 
     FlightResponseDTO getFlightById(Integer id);
 
-    org.springframework.data.domain.Page<FlightResponseDTO> searchFlights(String origin, String destination, LocalDate date, int page, int size);
+    org.springframework.data.domain.Page<FlightResponseDTO> searchFlights(String origin, String destination, String date, int page, int size);
 
     FlightResponseDTO updateFlightStatus(Integer id, FlightStatus status);
 }
