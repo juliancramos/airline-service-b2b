@@ -14,40 +14,39 @@
 
   <!-- Advanced Filters Area -->
   <div class="bg-white rounded-xl shadow-[0_2px_10px_rgb(0,0,0,0.04)] border border-gray-100 p-6">
-    <div class="grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
+    <form [formGroup]="filterForm" (ngSubmit)="onSearch()" class="grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
       
       <div class="space-y-1.5">
         <label class="text-xs font-semibold text-gray-600 uppercase tracking-wider">ID de Vuelo</label>
-        <input type="text" placeholder="Ej. VY-1024" class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500">
+        <input type="text" formControlName="flightId" placeholder="Ej. 1" class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500">
       </div>
       
       <div class="space-y-1.5">
         <label class="text-xs font-semibold text-gray-600 uppercase tracking-wider">Origen</label>
-        <input type="text" placeholder="Ej. BOG" class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500">
+        <input type="text" formControlName="origin" placeholder="Ej. BOG" class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500">
       </div>
       
       <div class="space-y-1.5">
         <label class="text-xs font-semibold text-gray-600 uppercase tracking-wider">Destino</label>
-        <input type="text" placeholder="Ej. MIA" class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500">
+        <input type="text" formControlName="destination" placeholder="Ej. MIA" class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500">
       </div>
       
       <div class="space-y-1.5">
         <label class="text-xs font-semibold text-gray-600 uppercase tracking-wider">Fecha</label>
-        <input type="date" class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 text-gray-500">
+        <input type="date" formControlName="date" class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 text-gray-500">
       </div>
       
       <div class="space-y-1.5">
         <label class="text-xs font-semibold text-gray-600 uppercase tracking-wider">Documento Pasajero</label>
-        <input type="text" placeholder="ID o Pasaporte" class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500">
+        <input type="text" formControlName="passengerDocument" placeholder="ID o Pasaporte" class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500">
       </div>
       
-    </div>
-    
-    <div class="mt-4 flex justify-end">
-      <button class="rounded-md bg-gray-900 px-5 py-2 text-sm font-medium text-white hover:bg-gray-800 transition-colors shadow-sm cursor-pointer">
-        Filtrar Resultados
-      </button>
-    </div>
+      <div class="md:col-span-5 mt-4 flex justify-end">
+        <button type="submit" [disabled]="isLoading" class="rounded-md bg-gray-900 px-5 py-2 text-sm font-medium text-white hover:bg-gray-800 transition-colors shadow-sm cursor-pointer disabled:opacity-50">
+          Filtrar Resultados
+        </button>
+      </div>
+    </form>
   </div>
 
   <!-- Data Table Area -->
@@ -59,13 +58,13 @@
       <p class="text-sm font-medium text-gray-500">Sincronizando reservas...</p>
     </div>
 
-    <!-- Table -->
+    <!-- Table content mapping to the Page content Array -->
     <div class="overflow-x-auto">
       <table class="w-full whitespace-nowrap text-left text-sm">
         <thead class="bg-gray-50/50 border-b border-gray-200">
           <tr>
             <th class="px-6 py-4 font-semibold text-gray-700">Reserva ID</th>
-            <th class="px-6 py-4 font-semibold text-gray-700">Vuelo</th>
+            <th class="px-6 py-4 font-semibold text-gray-700">Vuelo ID</th>
             <th class="px-6 py-4 font-semibold text-gray-700">Contacto</th>
             <th class="px-6 py-4 font-semibold text-gray-700 text-center">Pasajeros</th>
             <th class="px-6 py-4 font-semibold text-gray-700 text-right">Total</th>
@@ -74,35 +73,70 @@
           </tr>
         </thead>
         <tbody class="divide-y divide-gray-100">
-          <tr *ngFor="let res of reservations" class="hover:bg-gray-50/50 transition-colors">
-            <td class="px-6 py-4 font-bold text-gray-900">{{ res.id }}</td>
-            <td class="px-6 py-4 font-medium text-gray-700">{{ res.flightNumber }}</td>
-            <td class="px-6 py-4 text-gray-500">{{ res.contactEmail }}</td>
-            <td class="px-6 py-4 text-center font-medium text-gray-900">{{ res.passengerCount }}</td>
-            <td class="px-6 py-4 text-right font-medium text-gray-900">{{ res.totalPrice | currency:'USD' }}</td>
+          <tr *ngFor="let res of reservationPage?.content || []" class="hover:bg-gray-50/50 transition-colors">
+            <td class="px-6 py-4">
+              <span class="font-bold text-gray-900">{{ res.reservationId }}</span>
+              <p class="text-xs text-gray-400 mt-1">{{ res.externalReservationId }}</p>
+            </td>
+            <td class="px-6 py-4 font-medium text-blue-600 underline cursor-pointer">{{ res.flightId }}</td>
+            <td class="px-6 py-4 text-gray-600">
+              {{ res.passengers && res.passengers.length > 0 ? res.passengers[0].firstName + ' ' + res.passengers[0].lastName : 'Sin Contacto' }}
+            </td>
+            <td class="px-6 py-4 text-center font-medium text-gray-900">{{ res.passengers.length || 0 }}</td>
+            <td class="px-6 py-4 text-right font-medium text-gray-400 italic">N/A</td>
             <td class="px-6 py-4">
               <span 
                 class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold"
                 [ngClass]="{
-                  'bg-emerald-100 text-emerald-800 border': res.status === 'confirmed',
-                  'bg-amber-100 text-amber-800 border': res.status === 'pending'
+                  'bg-emerald-100 text-emerald-800 border-emerald-200 border': res.reservationStatus === 'confirmed',
+                  'bg-amber-100 text-amber-800 border-amber-200 border': res.reservationStatus === 'pending'
                 }">
                 <!-- Spanish translations -->
-                {{ res.status === 'confirmed' ? 'Confirmada' : 'Pendiente' }}
+                {{ res.reservationStatus === 'confirmed' ? 'Confirmada' : 'Pendiente' }}
               </span>
             </td>
             <td class="px-6 py-4 text-center">
               <button class="text-blue-600 hover:text-blue-800 font-medium text-sm transition-colors cursor-pointer mr-3">Ver Detalle</button>
-              <button *ngIf="res.status === 'pending'" class="text-emerald-600 hover:text-emerald-800 font-medium text-sm transition-colors cursor-pointer">Confirmar</button>
+              <button *ngIf="res.reservationStatus === 'pending'" class="text-emerald-600 hover:text-emerald-800 font-medium text-sm transition-colors cursor-pointer">Confirmar</button>
             </td>
           </tr>
         </tbody>
       </table>
       
-      <!-- Empty State handling -->
-      <div *ngIf="reservations.length === 0 && !isLoading" class="p-12 text-center">
-        <p class="text-gray-500">No hay reservas registradas para esta búsqueda.</p>
+      <!-- Empty State handling robustly relying on the Page object empty flag -->
+      <div *ngIf="(!reservationPage || reservationPage.content.length === 0) && !isLoading" class="p-12 text-center">
+        <p class="text-gray-500">No se encontraron reservas para esta búsqueda.</p>
       </div>
     </div>
   </div>
+
+  <!-- Dynamic Backend Engine Pagination UI -->
+  <div *ngIf="reservationPage && reservationPage.totalPages > 0" class="flex flex-col sm:flex-row items-center justify-between border border-gray-100 bg-white px-6 py-4 rounded-xl shadow-[0_2px_10px_rgb(0,0,0,0.04)] mt-2">
+    <div class="mb-4 sm:mb-0">
+      <p class="text-sm text-gray-700 font-medium">
+        Mostrando página 
+        <span class="font-bold text-gray-900 mx-1">{{ reservationPage.number + 1 }}</span>
+        de
+        <span class="font-bold text-gray-900 mx-1">{{ reservationPage.totalPages }}</span>
+        <span class="text-gray-400 ml-1">({{ reservationPage.totalElements }} reservas en total)</span>
+      </p>
+    </div>
+    
+    <div>
+      <nav class="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
+        <button (click)="prevPage()" [disabled]="reservationPage.first || isLoading" 
+           class="relative inline-flex items-center rounded-l-md px-3 py-2 text-gray-500 ring-1 ring-inset ring-gray-300 bg-white hover:bg-gray-50 focus:z-20 focus:outline-offset-0 disabled:opacity-50 disabled:bg-gray-100 disabled:cursor-not-allowed transition-colors cursor-pointer">
+          <span class="sr-only">Anterior</span>
+          <svg class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M11.78 5.22a.75.75 0 0 1 0 1.06L8.06 10l3.72 3.72a.75.75 0 1 1-1.06 1.06l-4.25-4.25a.75.75 0 0 1 0-1.06l4.25-4.25a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" /></svg>
+          <span class="text-sm font-semibold">Anterior</span>
+        </button>
+        <button (click)="nextPage()" [disabled]="reservationPage.last || isLoading"
+           class="relative inline-flex items-center rounded-r-md px-3 py-2 text-gray-500 ring-1 ring-inset ring-gray-300 bg-white hover:bg-gray-50 focus:z-20 focus:outline-offset-0 disabled:opacity-50 disabled:bg-gray-100 disabled:cursor-not-allowed transition-colors cursor-pointer">
+          <span class="text-sm font-semibold">Siguiente</span>
+          <svg class="h-5 w-5 ml-1" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" /></svg>
+        </button>
+      </nav>
+    </div>
+  </div>
+
 </div>

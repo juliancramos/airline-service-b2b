@@ -60,7 +60,7 @@ export class ReservationFormComponent {
 
   onFlightSelected(flight: any): void {
     this.selectedFlight = flight;
-    this.reservationForm.patchValue({ flightId: flight.id });
+    this.reservationForm.patchValue({ flightId: flight.flightId });
     this.closeFlightModal();
   }
 
@@ -73,11 +73,9 @@ export class ReservationFormComponent {
     this.isSubmitting = true;
     
     const formData = this.reservationForm.getRawValue();
+    // Only map the parameters accepted by Java backend ReservationRequestDTO
     const payload = {
-      flightNumber: this.selectedFlight.flightNumber,
-      passengerCount: formData.passengers.length,
-      totalPrice: formData.passengers.length * 450, // mock standard pricing per passenger
-      contactEmail: formData.contactEmail,
+      flightId: formData.flightId,
       passengers: formData.passengers
     };
 

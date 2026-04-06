@@ -29,12 +29,14 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
             SELECT 1 FROM PassengerFlight pf 
             WHERE pf.reservation = r AND pf.documentNumber = :passengerDocument
         ))
+        ORDER BY r.lockTimestamp DESC
     """)
-    List<Reservation> findProjectedByFilters(
+    org.springframework.data.domain.Page<Reservation> findProjectedByFilters(
             @Param("flightId") Integer flightId,
             @Param("origin") String origin,
             @Param("destination") String destination,
             @Param("date") LocalDate date,
-            @Param("passengerDocument") String passengerDocument
+            @Param("passengerDocument") String passengerDocument,
+            org.springframework.data.domain.Pageable pageable
     );
 }

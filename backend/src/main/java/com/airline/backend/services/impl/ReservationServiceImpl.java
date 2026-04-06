@@ -119,17 +119,21 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<ReservationResponseDTO> searchReservations(
-            Integer flightId, String origin, String destination, java.time.LocalDate date, String passengerDocument) {
+    public org.springframework.data.domain.Page<ReservationResponseDTO> searchReservations(
+            Integer flightId, String origin, String destination, java.time.LocalDate date, String passengerDocument, int page, int size) {
 
-        return reservationRepository.findProjectedByFilters(flightId, origin, destination, date, passengerDocument)
-                .stream()
+        String safeOrigin = (origin != null && !origin.trim().isEmpty()) ? origin.trim() : null;
+        String safeDest = (destination != null && !destination.trim().isEmpty()) ? destination.trim() : null;
+        String safeDoc  = (passengerDocument != null && !passengerDocument.trim().isEmpty()) ? passengerDocument.trim() : null;
+
+        org.springframework.data.domain.PageRequest pageRequest = org.springframework.data.domain.PageRequest.of(page, size);
+
+        return reservationRepository.findProjectedByFilters(flightId, safeOrigin, safeDest, date, safeDoc, pageRequest)
                 .map(r -> {
                     List<PassengerFlight> passengers =
                             passengerFlightRepository.findByReservation_ReservationId(r.getReservationId());
                     return buildResponse(r, passengers);
-                })
-                .toList();
+                });
     }
 
     // helpers

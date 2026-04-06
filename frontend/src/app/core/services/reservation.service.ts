@@ -1,72 +1,51 @@
-import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { delay } from 'rxjs/operators';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 import { Reservation } from '../../shared/models/reservation.model';
+import { PageResponse } from '../../shared/models/pagination.model';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ReservationService {
-  private readonly mockReservations: Reservation[] = [
-    {
-      id: 'RES-001',
-      flightNumber: 'VY-1024',
-      passengerCount: 2,
-      totalPrice: 900.00,
-      status: 'confirmed',
-      createdAt: '2026-05-10T09:15:00Z',
-      contactEmail: 'cliente@empresa.com'
-    },
-    {
-      id: 'RES-002',
-      flightNumber: 'VY-3042',
-      passengerCount: 1,
-      totalPrice: 850.50,
-      status: 'pending',
-      createdAt: '2026-05-12T14:20:00Z',
-      contactEmail: 'ejecutivo@corp.com'
-    },
-    {
-      id: 'RES-003',
-      flightNumber: 'VY-1024',
-      passengerCount: 4,
-      totalPrice: 1800.00,
-      status: 'confirmed',
-      createdAt: '2026-05-13T08:05:00Z',
-      contactEmail: 'equipo@agencia.com'
-    },
-    {
-      id: 'RES-004',
-      flightNumber: 'VY-555',
-      passengerCount: 1,
-      totalPrice: 520.00,
-      status: 'pending',
-      createdAt: '2026-05-14T11:45:00Z',
-      contactEmail: 'viajero@personal.com'
-    },
-    {
-      id: 'RES-005',
-      flightNumber: 'VY-202',
-      passengerCount: 3,
-      totalPrice: 930.00,
-      status: 'confirmed',
-      createdAt: '2026-05-15T16:30:00Z',
-      contactEmail: 'manager@startup.io'
-    }
-  ];
+  private readonly http = inject(HttpClient);
+  private readonly authService = inject(AuthService);
+  private readonly apiUrl = environment.apiUrl + '/reservations';
 
-  getReservations(): Observable<Reservation[]> {
-    return of(this.mockReservations).pipe(delay(800));
+  searchReservations(
+    flightId?: string,
+    origin?: string,
+    destination?: string,
+    date?: string,
+    passengerDocument?: string,
+    page: number = 0,
+    size: number = 10
+  ): Observable<PageResponse<Reservation>> {
+    let params = new HttpParams()
+        .set('page', page.toString())
+        .set('size', size.toString());
+        
+    if (flightId) params = params.set('flightId', flightId);
+    if (origin) params = params.set('origin', origin);
+    if (destination) params = params.set('destination', destination);
+    if (date) params = params.set('date', date);
+    if (passengerDocument) params = params.set('passengerDocument', passengerDocument);
+      
+    return this.http.get<PageResponse<Reservation>>(`${this.apiUrl}/search`, { params });
   }
 
   createReservation(reservationData: any): Observable<Reservation> {
-    const newReservation: Reservation = {
-      ...reservationData,
-      id: `RES-${Math.floor(Math.random() * 900) + 100}`,
-      status: 'pending',
-      createdAt: new Date().toISOString()
-    };
-    this.mockReservations.unshift(newReservation);
-    return of(newReservation).pipe(delay(1000));
+    const user = this.authService.getCurrentUser();
+    let requesterId = 1;
+
+    if (user && typeof user.id === 'string' && user.id.includes('EMP-')) {
+      const parsed = parseInt(user.id.replace('EMP-', ''), 10);
+      if (!isNaN(parsed)) requesterId = parsed;
+    }
+
+    const params = new HttpParams().set('requesterId', requesterId.toString());
+    return this.http.post<Reservation>(this.apiUrl, reservationData, { params });
   }
 }

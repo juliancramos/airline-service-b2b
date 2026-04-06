@@ -13,6 +13,6 @@ public interface ReservationService {
 
     List<ReservationResponseDTO> getReservationsByFlight(Integer flightId);
 
-    List<ReservationResponseDTO> searchReservations(
-            Integer flightId, String origin, String destination, java.time.LocalDate date, String passengerDocument);
+    org.springframework.data.domain.Page<ReservationResponseDTO> searchReservations(
+            Integer flightId, String origin, String destination, java.time.LocalDate date, String passengerDocument, int page, int size);
 }
