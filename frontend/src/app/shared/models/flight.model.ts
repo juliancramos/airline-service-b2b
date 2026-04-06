@@ -1,4 +1,4 @@
-export type FlightStatus = 'SCHEDULED' | 'ACTIVE' | 'CANCELLED';
+export type FlightStatus = 'scheduled' | 'delayed' | 'cancelled';
 
 export interface Flight {
   flightId?: number;

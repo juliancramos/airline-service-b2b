@@ -37,7 +37,7 @@ export class FlightService {
     }
 
     const params = new HttpParams().set('creatorId', creatorId.toString());
-    flightData.status = 'SCHEDULED';
+    flightData.status = 'scheduled';
     return this.http.post<Flight>(this.apiUrl, flightData, { params });
   }
 }

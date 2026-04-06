@@ -58,6 +58,7 @@ export class FlightFormComponent {
 
     this.flightService.createFlight(newFlight).subscribe({
       next: () => {
+        console.log('Flight creation successful! Redirecting to list...');
         this.isSubmitting = false;
         this.router.navigate(['/flights']);
       },

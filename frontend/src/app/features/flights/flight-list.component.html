@@ -80,11 +80,11 @@
               <span 
                 class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold capitalize border"
                 [ngClass]="{
-                  'bg-emerald-100 text-emerald-800 border-emerald-200': flight.status === 'SCHEDULED',
-                  'bg-blue-100 text-blue-800 border-blue-200': flight.status === 'ACTIVE',
-                  'bg-rose-100 text-rose-800 border-rose-200': flight.status === 'CANCELLED'
+                  'bg-emerald-100 text-emerald-800 border-emerald-200': flight.status === 'scheduled',
+                  'bg-amber-100 text-amber-800 border-amber-200': flight.status === 'delayed',
+                  'bg-rose-100 text-rose-800 border-rose-200': flight.status === 'cancelled'
                 }">
-                {{ flight.status === 'SCHEDULED' ? 'Programado' : flight.status === 'ACTIVE' ? 'En el aire' : 'Cancelado' }}
+                {{ flight.status === 'scheduled' ? 'Programado' : flight.status === 'delayed' ? 'Retrasado' : 'Cancelado' }}
               </span>
             </td>
             <td class="px-6 py-4 text-right font-medium text-gray-900">
