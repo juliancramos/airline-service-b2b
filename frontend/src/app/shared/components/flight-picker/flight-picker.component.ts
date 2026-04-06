@@ -1,5 +1,7 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FlightService } from '../../../core/services/flight.service';
+import { Flight } from '../../models/flight.model';
 
 @Component({
   selector: 'app-flight-picker',
@@ -7,17 +9,25 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule],
   templateUrl: './flight-picker.component.html'
 })
-export class FlightPickerComponent {
-  @Output() flightSelected = new EventEmitter<any>();
+export class FlightPickerComponent implements OnInit {
+  @Output() flightSelected = new EventEmitter<Flight>();
+  private readonly flightService = inject(FlightService);
 
-  // Mock basic flights strictly for UI rendering layout
-  flights = [
-    { id: 'f-101', flightNumber: 'VY-400', origin: 'Bogotá (BOG)', destination: 'Miami (MIA)', datetime: '2026-06-10 14:00' },
-    { id: 'f-102', flightNumber: 'VY-405', origin: 'Medellín (MDE)', destination: 'Lima (LIM)', datetime: '2026-06-10 18:30' },
-    { id: 'f-103', flightNumber: 'VY-510', origin: 'Cali (CLO)', destination: 'Madrid (MAD)', datetime: '2026-06-11 09:15' }
-  ];
+  flights: Flight[] = [];
+  isLoading = true;
 
-  selectFlight(flight: any): void {
+  ngOnInit(): void {
+    // Dynamically fetch first page of completely available flights with no filters required
+    this.flightService.getFlights().subscribe({
+      next: (pageData) => {
+        this.flights = pageData.content;
+        this.isLoading = false;
+      },
+      error: () => this.isLoading = false
+    });
+  }
+
+  selectFlight(flight: Flight): void {
     this.flightSelected.emit(flight);
   }
 }

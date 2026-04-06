@@ -1,10 +1,12 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators, FormArray, FormGroup } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { finalize } from 'rxjs/operators';
 import { ReservationService } from '../../../core/services/reservation.service';
 import { ModalComponent } from '../../../shared/components/modal/modal.component';
 import { FlightPickerComponent } from '../../../shared/components/flight-picker/flight-picker.component';
+import { Flight } from '../../../shared/models/flight.model';
 
 @Component({
   selector: 'app-reservation-form',
@@ -16,13 +18,19 @@ export class ReservationFormComponent {
   private readonly fb = inject(FormBuilder);
   private readonly reservationService = inject(ReservationService);
   private readonly router = inject(Router);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   isSubmitting = false;
   isModalOpen = false;
-  selectedFlight: any = null;
+  selectedFlight: Flight | null = null;
+
+  get totalReservationPrice(): number {
+    if (!this.selectedFlight || !this.selectedFlight.seatPrice) return 0;
+    return this.passengers.length * this.selectedFlight.seatPrice;
+  }
 
   reservationForm = this.fb.group({
-    flightId: ['', Validators.required],
+    flightId: [null as number | null, Validators.required],
     contactEmail: ['', [Validators.required, Validators.email]],
     passengers: this.fb.array([this.createPassenger()])
   });
@@ -33,8 +41,8 @@ export class ReservationFormComponent {
 
   createPassenger(): FormGroup {
     return this.fb.nonNullable.group({
-      docType: ['CC', Validators.required],
-      docNumber: ['', Validators.required],
+      documentType: ['CC', Validators.required],
+      documentNumber: ['', Validators.required],
       firstName: ['', Validators.required],
       lastName: ['', Validators.required]
     });
@@ -58,7 +66,7 @@ export class ReservationFormComponent {
     this.isModalOpen = false;
   }
 
-  onFlightSelected(flight: any): void {
+  onFlightSelected(flight: Flight): void {
     this.selectedFlight = flight;
     this.reservationForm.patchValue({ flightId: flight.flightId });
     this.closeFlightModal();
@@ -79,13 +87,17 @@ export class ReservationFormComponent {
       passengers: formData.passengers
     };
 
-    this.reservationService.createReservation(payload).subscribe({
-      next: () => {
+    this.reservationService.createReservation(payload).pipe(
+      finalize(() => {
         this.isSubmitting = false;
+        this.cdr.detectChanges();
+      })
+    ).subscribe({
+      next: () => {
         this.router.navigate(['/reservations']);
       },
       error: () => {
-        this.isSubmitting = false;
+        // UI naturally unlocked via finalize
       }
     });
   }
