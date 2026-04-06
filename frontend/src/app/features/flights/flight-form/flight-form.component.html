@@ -19,58 +19,56 @@
       <!-- Grid 2 columns -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         
-        <!-- Origen -->
         <div class="space-y-1.5">
           <label class="text-sm font-semibold text-gray-700">Origen</label>
-          <input type="text" formControlName="origin" placeholder="Ej. BOG (Aeropuerto El Dorado)" 
+          <input type="text" formControlName="originCity" placeholder="Ej. BOG" 
             class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-            [class.border-red-500]="flightForm.get('origin')?.invalid && flightForm.get('origin')?.touched">
-          <p *ngIf="flightForm.get('origin')?.invalid && flightForm.get('origin')?.touched" class="text-xs text-red-500 mt-1">Este campo es requerido.</p>
+            [class.border-red-500]="flightForm.get('originCity')?.invalid && flightForm.get('originCity')?.touched">
+          <p *ngIf="flightForm.get('originCity')?.invalid && flightForm.get('originCity')?.touched" class="text-xs text-red-500 mt-1">Este campo es requerido.</p>
         </div>
 
-        <!-- Destino -->
         <div class="space-y-1.5">
           <label class="text-sm font-semibold text-gray-700">Destino</label>
-          <input type="text" formControlName="destination" placeholder="Ej. MIA (Aeropuerto Intl. Miami)" 
+          <input type="text" formControlName="destinationCity" placeholder="Ej. MIA" 
             class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-            [class.border-red-500]="flightForm.get('destination')?.invalid && flightForm.get('destination')?.touched">
-          <p *ngIf="flightForm.get('destination')?.invalid && flightForm.get('destination')?.touched" class="text-xs text-red-500 mt-1">Este campo es requerido.</p>
+            [class.border-red-500]="flightForm.get('destinationCity')?.invalid && flightForm.get('destinationCity')?.touched">
+          <p *ngIf="flightForm.get('destinationCity')?.invalid && flightForm.get('destinationCity')?.touched" class="text-xs text-red-500 mt-1">Este campo es requerido.</p>
         </div>
 
-        <!-- Salida -->
+        <div class="space-y-1.5">
+          <label class="text-sm font-semibold text-gray-700">Fecha de Salida</label>
+          <input type="date" formControlName="departureDate" 
+            class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500">
+        </div>
+
         <div class="space-y-1.5">
           <label class="text-sm font-semibold text-gray-700">Hora de Salida</label>
-          <input type="datetime-local" formControlName="departureTime" 
-            class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-            [class.border-red-500]="flightForm.get('departureTime')?.invalid && flightForm.get('departureTime')?.touched">
-          <p *ngIf="flightForm.get('departureTime')?.invalid && flightForm.get('departureTime')?.touched" class="text-xs text-red-500 mt-1">Este campo es requerido.</p>
+          <input type="time" formControlName="startTime" 
+            class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500">
         </div>
 
-        <!-- Llegada -->
+        <div class="space-y-1.5">
+          <label class="text-sm font-semibold text-gray-700">Fecha de Llegada</label>
+          <input type="date" formControlName="arrivalDate" 
+            class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500">
+        </div>
+
         <div class="space-y-1.5">
           <label class="text-sm font-semibold text-gray-700">Hora de Llegada</label>
-          <input type="datetime-local" formControlName="arrivalTime" 
-            class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-            [class.border-red-500]="flightForm.get('arrivalTime')?.invalid && flightForm.get('arrivalTime')?.touched">
-          <p *ngIf="flightForm.get('arrivalTime')?.invalid && flightForm.get('arrivalTime')?.touched" class="text-xs text-red-500 mt-1">Este campo es requerido.</p>
+          <input type="time" formControlName="endTime" 
+            class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500">
         </div>
 
-        <!-- Capacidad -->
         <div class="space-y-1.5">
           <label class="text-sm font-semibold text-gray-700">Capacidad (Asientos)</label>
-          <input type="number" formControlName="capacity" 
-            class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-            [class.border-red-500]="flightForm.get('capacity')?.invalid && flightForm.get('capacity')?.touched">
-          <p *ngIf="flightForm.get('capacity')?.invalid && flightForm.get('capacity')?.touched" class="text-xs text-red-500 mt-1">El valor mínimo es 1.</p>
+          <input type="number" formControlName="maxCapacity" 
+            class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500">
         </div>
 
-        <!-- Precio -->
         <div class="space-y-1.5">
           <label class="text-sm font-semibold text-gray-700">Precio Base (USD)</label>
-          <input type="number" formControlName="price" 
-            class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-            [class.border-red-500]="flightForm.get('price')?.invalid && flightForm.get('price')?.touched">
-          <p *ngIf="flightForm.get('price')?.invalid && flightForm.get('price')?.touched" class="text-xs text-red-500 mt-1">Precio debe ser mayor a 0.</p>
+          <input type="number" formControlName="seatPrice" 
+            class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500">
         </div>
 
       </div>

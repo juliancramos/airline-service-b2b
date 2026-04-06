@@ -1,12 +1,19 @@
 export type ReservationStatus = 'confirmed' | 'pending';
 
+export interface PassengerDTO {
+    passengerId?: number;
+    firstName: string;
+    lastName: string;
+    documentType: string;
+    documentNumber: string;
+}
+
 export interface Reservation {
-  id: string;
-  flightNumber: string;
-  passengerCount: number;
-  totalPrice: number;
-  status: ReservationStatus;
-  createdAt: string; 
-  contactEmail: string;
-  passengerDocument?: string;
+  reservationId: number;
+  flightId: number;
+  externalReservationId: string;
+  reservationStatus: ReservationStatus;
+  lockTimestamp: string;
+  confirmationTimestamp: string;
+  passengers: PassengerDTO[];
 }

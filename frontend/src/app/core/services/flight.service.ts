@@ -1,60 +1,43 @@
-import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { delay } from 'rxjs/operators';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 import { Flight } from '../../shared/models/flight.model';
+import { AuthService } from './auth.service';
+import { PageResponse } from '../../shared/models/pagination.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FlightService {
-  private readonly mockFlights: Flight[] = [
-    {
-      id: 'f-001',
-      flightNumber: 'VY-1024',
-      origin: 'Bogotá (BOG)',
-      destination: 'Miami (MIA)',
-      departureTime: '2026-05-15T08:30:00Z',
-      arrivalTime: '2026-05-15T12:45:00Z',
-      status: 'scheduled',
-      price: 450.00,
-      capacity: 150
-    },
-    {
-      id: 'f-002',
-      flightNumber: 'VY-3042',
-      origin: 'Medellín (MDE)',
-      destination: 'Madrid (MAD)',
-      departureTime: '2026-05-15T18:00:00Z',
-      arrivalTime: '2026-05-16T10:30:00Z',
-      status: 'active',
-      price: 850.50,
-      capacity: 220
-    },
-    {
-      id: 'f-003',
-      flightNumber: 'VY-901',
-      origin: 'Cali (CLO)',
-      destination: 'Panamá (PTY)',
-      departureTime: '2026-05-14T14:15:00Z',
-      arrivalTime: '2026-05-14T15:45:00Z',
-      status: 'cancelled',
-      price: 210.00,
-      capacity: 120
-    }
-  ];
+  private readonly http = inject(HttpClient);
+  private readonly authService = inject(AuthService);
+  private readonly apiUrl = environment.apiUrl + '/flights';
 
-  getFlights(): Observable<Flight[]> {
-    return of(this.mockFlights).pipe(delay(800));
+  getFlights(origin?: string, destination?: string, date?: string, page: number = 0, size: number = 10): Observable<PageResponse<Flight>> {
+    let params = new HttpParams()
+        .set('page', page.toString())
+        .set('size', size.toString());
+        
+    if (origin) params = params.set('origin', origin);
+    if (destination) params = params.set('destination', destination);
+    if (date) params = params.set('date', date);
+      
+    return this.http.get<PageResponse<Flight>>(this.apiUrl, { params });
   }
 
-  createFlight(flightData: Omit<Flight, 'id' | 'flightNumber' | 'status'>): Observable<Flight> {
-    const newFlight: Flight = {
-      ...flightData,
-      id: `f-${Math.floor(Math.random() * 1000)}`,
-      flightNumber: `VY-${Math.floor(Math.random() * 9000) + 1000}`,
-      status: 'scheduled'
-    };
-    this.mockFlights.unshift(newFlight);
-    return of(newFlight).pipe(delay(1000));
+  createFlight(flightData: Flight): Observable<Flight> {
+    const user = this.authService.getCurrentUser();
+    let creatorId = 1;
+
+    // Parse the string mock ID to a numeric ID since Backend expects Integer creatorId
+    if (user && typeof user.id === 'string' && user.id.includes('EMP-')) {
+      const parsed = parseInt(user.id.replace('EMP-', ''), 10);
+      if (!isNaN(parsed)) creatorId = parsed;
+    }
+
+    const params = new HttpParams().set('creatorId', creatorId.toString());
+    flightData.status = 'scheduled';
+    return this.http.post<Flight>(this.apiUrl, flightData, { params });
   }
 }
