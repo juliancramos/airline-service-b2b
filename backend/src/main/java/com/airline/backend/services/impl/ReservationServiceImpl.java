@@ -57,8 +57,9 @@ public class ReservationServiceImpl implements ReservationService {
         Reservation reservation = Reservation.builder()
                 .flight(flight)
                 .externalReservationId(request.getExternalReservationId())
-                .reservationStatus(ReservationStatus.pending)
+                .reservationStatus(ReservationStatus.confirmed)
                 .lockTimestamp(LocalDateTime.now())
+                .confirmationTimestamp(LocalDateTime.now())
                 .build();
 
         Reservation saved = reservationRepository.save(reservation);
@@ -73,8 +74,8 @@ public class ReservationServiceImpl implements ReservationService {
 
         passengerFlightRepository.saveAll(passengers);
 
-        audit("RESERVATION_CREATED",
-                String.format("Reservation %d created for flight %d with %d passenger(s). Available seats remaining: %d.",
+        audit("RESERVATION_CONFIRMED",
+                String.format("Reservation %d confirmed immediately for flight %d with %d passenger(s). Available seats remaining: %d.",
                         saved.getReservationId(), flight.getFlightId(), requestedSeats, flight.getAvailableSeats()),
                 String.valueOf(requesterId));
 
