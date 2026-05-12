@@ -15,5 +15,6 @@ public interface FlightMapper {
 
     @Mapping(target = "flightId", ignore = true)
     @Mapping(target = "createdBy", ignore = true)
+    @Mapping(target = "availableSeats", ignore = true)
     Flight toEntity(FlightRequestDTO dto);
 }

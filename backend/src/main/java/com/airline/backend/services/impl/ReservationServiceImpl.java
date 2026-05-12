@@ -29,8 +29,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReservationServiceImpl implements ReservationService {
 
-    private static final List<ReservationStatus> ACTIVE_STATUSES =
-            List.of(ReservationStatus.pending, ReservationStatus.confirmed);
 
     private final ReservationRepository reservationRepository;
     private final FlightRepository flightRepository;
@@ -44,15 +42,17 @@ public class ReservationServiceImpl implements ReservationService {
         Flight flight = flightRepository.findById(request.getFlightId())
                 .orElseThrow(() -> new ResourceNotFoundException("Flight", "flightId", request.getFlightId()));
 
-        int occupiedSeats = passengerFlightRepository
-                .countByReservation_Flight_FlightIdAndReservation_ReservationStatusIn(
-                        flight.getFlightId(), ACTIVE_STATUSES);           
         int requestedSeats = request.getPassengers().size();
 
-        if (occupiedSeats + requestedSeats > flight.getMaxCapacity()) {
+        // Validate that enough seats are still available
+        if (requestedSeats > flight.getAvailableSeats()) {
             throw new InsufficientCapacityException(
-                    flight.getFlightId(), requestedSeats, flight.getMaxCapacity() - occupiedSeats);
+                    flight.getFlightId(), requestedSeats, flight.getAvailableSeats());
         }
+
+        // Deduct seats atomically within this same transaction
+        flight.setAvailableSeats(flight.getAvailableSeats() - requestedSeats);
+        flightRepository.save(flight);
 
         Reservation reservation = Reservation.builder()
                 .flight(flight)
@@ -74,8 +74,8 @@ public class ReservationServiceImpl implements ReservationService {
         passengerFlightRepository.saveAll(passengers);
 
         audit("RESERVATION_CREATED",
-                String.format("Reservation %d created for flight %d with %d passenger(s).",
-                        saved.getReservationId(), flight.getFlightId(), requestedSeats),
+                String.format("Reservation %d created for flight %d with %d passenger(s). Available seats remaining: %d.",
+                        saved.getReservationId(), flight.getFlightId(), requestedSeats, flight.getAvailableSeats()),
                 String.valueOf(requesterId));
 
         return buildResponse(saved, passengers);
