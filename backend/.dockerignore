@@ -1,0 +1,19 @@
+# Maven build output
+target/
+
+# IDE and OS files
+.idea/
+*.iml
+.DS_Store
+Thumbs.db
+
+# Environment files (never include credentials in image context)
+.env
+*.env
+
+# Git
+.git/
+.gitignore
+
+# Docs
+*.md

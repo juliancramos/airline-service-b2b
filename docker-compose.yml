@@ -1,0 +1,36 @@
+services:
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      
+      args:
+        DB_URL: ${DB_URL}
+        DB_USERNAME: ${DB_USERNAME}
+        DB_PASSWORD: ${DB_PASSWORD}
+    container_name: airline-backend
+    env_file:
+      - ./backend/.env
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    networks:
+      - airline-net
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: airline-frontend
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+    networks:
+      - airline-net
+
+networks:
+  airline-net:
+    driver: bridge
