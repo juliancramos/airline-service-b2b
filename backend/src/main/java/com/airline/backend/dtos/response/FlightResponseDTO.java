@@ -25,6 +25,7 @@ public class FlightResponseDTO {
     private LocalTime endTime;
     private BigDecimal seatPrice;
     private Integer maxCapacity;
+    private Integer availableSeats;
     private FlightStatus status;
     private Integer createdById;
 }

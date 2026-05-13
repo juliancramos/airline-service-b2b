@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Service
 @Transactional
@@ -33,6 +32,8 @@ public class FlightServiceImpl implements FlightService {
 
         Flight flight = flightMapper.toEntity(dto);
         flight.setCreatedBy(creator);
+        // Initialize available seats to match the full capacity on creation
+        flight.setAvailableSeats(dto.getMaxCapacity());
 
         return flightMapper.toResponseDTO(flightRepository.save(flight));
     }

@@ -48,6 +48,9 @@ public class Flight {
     @Column(name = "max_capacity", nullable = false)
     private Integer maxCapacity;
 
+    @Column(name = "available_seats", nullable = false)
+    private Integer availableSeats;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private FlightStatus status;
